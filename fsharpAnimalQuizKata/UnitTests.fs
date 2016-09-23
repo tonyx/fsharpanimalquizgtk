@@ -64,7 +64,7 @@ module unitTests =
    [<Test>]
      let ``when the state is InviteToThinkAboutAnAnimal, and the current node is not leaf, will ask the node question, and the state is guessingfromcurrentnode``()=
         // arrange
-        let tree = SubTree {Question="is it big?"; yesBranch = AnimalName "elephant"; noBranch = AnimalName "cat"}
+        let tree = SubTree {Question="is it big?"; YesBranch = AnimalName "elephant"; NoBranch = AnimalName "cat"}
         let playStart = {(defaultInitState  tree) with currentState = InviteToThinkAboutAnAnimal; conversationToken = Some "token"}
 
         // act
@@ -77,7 +77,7 @@ module unitTests =
    [<Test>]
      let ``when is guessing from current non leaf node, a yes answer will make the current node being the yesBranch, and the yesNo history list will remember the "yes" answer ``()=
         // arrange
-        let tree = SubTree {Question="is it big?"; yesBranch = AnimalName "elephant"; noBranch = AnimalName "cat"}
+        let tree = SubTree {Question="is it big?"; YesBranch = AnimalName "elephant"; NoBranch = AnimalName "cat"}
         let playStart = {(defaultInitState  tree) with currentState = GuessingFromCurrentNode; messageFromPlayer = Some "yes"}
 
         // act
@@ -165,7 +165,7 @@ module unitTests =
    [<Test>]
      let ``will ask the root question when there is a non leaf tree``()=
         // arrange
-        let tree = {Question="is it big?";yesBranch=AnimalName "elephant";noBranch=AnimalName "cat"}
+        let tree = {Question="is it big?";YesBranch=AnimalName "elephant";NoBranch=AnimalName "cat"}
         let playStart = {(defaultInitState (SubTree tree)) with currentState = GuessingFromCurrentNode; messageFromPlayer = Some "ni/yeou"}
 
         // act
@@ -241,15 +241,15 @@ module unitTests =
         Assert.AreEqual(Welcome,result.currentState)    
         Assert.AreEqual("ok",result.messageFromEngine)
 
-        Assert.AreEqual(SubTree {Question="is it big?"; yesBranch = AnimalName "elephant"; noBranch = AnimalName "cat"},result.rootTree)
+        Assert.AreEqual(SubTree {Question="is it big?"; YesBranch = AnimalName "elephant"; NoBranch = AnimalName "cat"},result.rootTree)
 
 
 
  [<Test>]
     let ``a cycle of learning a new node from a two leafes tree``() =
         let tree = SubTree {Question="is it big?";
-                                yesBranch = AnimalName "elephant"; 
-                                noBranch = AnimalName "cat"}
+                                YesBranch = AnimalName "elephant"; 
+                                NoBranch = AnimalName "cat"}
 
         let playStart = {(defaultInitState tree) with currentState = Welcome} 
 
@@ -291,14 +291,14 @@ module unitTests =
         Assert.AreEqual(Welcome,result.currentState)    
         Assert.AreEqual("ok",result.messageFromEngine)
 
-        Assert.AreEqual(SubTree {Question="is it big?"; yesBranch = AnimalName "elephant"; noBranch = SubTree {Question="is it a rodent?"; yesBranch= AnimalName "mouse";noBranch=AnimalName "cat"}},result.rootTree)
+        Assert.AreEqual(SubTree {Question="is it big?"; YesBranch = AnimalName "elephant"; NoBranch = SubTree {Question="is it a rodent?"; YesBranch= AnimalName "mouse";NoBranch=AnimalName "cat"}},result.rootTree)
 
 
  [<Test>]
     let ``a cycle of learning a new node from a two leafes tree expanding the yesBranch``() =
         let tree = SubTree {Question="is it big?"; 
-                                yesBranch = AnimalName "elephant";
-                                noBranch = AnimalName "cat"}
+                                YesBranch = AnimalName "elephant";
+                                NoBranch = AnimalName "cat"}
 
         let playStart = {(defaultInitState tree)  with currentState = Welcome} 
 
@@ -340,7 +340,7 @@ module unitTests =
         Assert.AreEqual(Welcome,result.currentState)    
         Assert.AreEqual("ok",result.messageFromEngine)
 
-        Assert.AreEqual(SubTree {Question="is it big?"; yesBranch = SubTree {Question="is it a cetacea?"; yesBranch= AnimalName "whale";noBranch=AnimalName "elephant"};noBranch=AnimalName "cat"},result.rootTree)
+        Assert.AreEqual(SubTree {Question="is it big?"; YesBranch = SubTree {Question="is it a cetacea?"; YesBranch= AnimalName "whale";NoBranch=AnimalName "elephant"};NoBranch=AnimalName "cat"},result.rootTree)
 
         result <- consoleInteract { result with messageFromPlayer = None }
 
@@ -356,7 +356,7 @@ module unitTests =
 
  [<Test>]
     let ``navigate through in the no part of the yes/no branch``() =
-        let tree = SubTree {Question="is it big?"; yesBranch = AnimalName "elephant"; noBranch = AnimalName "cat"}
+        let tree = SubTree {Question="is it big?"; YesBranch = AnimalName "elephant"; NoBranch = AnimalName "cat"}
 
         let playStart = {(defaultInitState tree)  with currentState = Welcome} 
 
@@ -380,8 +380,8 @@ module unitTests =
     [<Test>]
     let ``navigate through in the yes part of the yes/no branch``() =
         let tree = SubTree {Question="is it big?"; 
-                                yesBranch = AnimalName "elephant"; 
-                                noBranch = AnimalName "cat"}
+                                YesBranch = AnimalName "elephant"; 
+                                NoBranch = AnimalName "cat"}
 
         let playStart = {(defaultInitState tree)  with currentState = Welcome} 
 
@@ -436,14 +436,14 @@ module unitTests =
 
         Assert.AreEqual(Welcome,result.currentState) 
         Assert.AreEqual("ok",result.messageFromEngine)
-        Assert.AreEqual(SubTree {Question="is it big?"; yesBranch = AnimalName "elephant"; noBranch = AnimalName "cat"},result.rootTree)
+        Assert.AreEqual(SubTree {Question="is it big?"; YesBranch = AnimalName "elephant"; NoBranch = AnimalName "cat"},result.rootTree)
 
         Assert.IsTrue([] = result.yesNoList)
 
 
  [<Test>]
     let ``descending the tree in making questions``() =
-        let tree = SubTree {Question="is it small?"; yesBranch = AnimalName "cat"; noBranch = AnimalName "elephant"}
+        let tree = SubTree {Question="is it small?"; YesBranch = AnimalName "cat"; NoBranch = AnimalName "elephant"}
         let playStart = {(defaultInitState tree)  with currentState = Welcome} 
 
         let mutable result = consoleInteract playStart 
@@ -455,7 +455,7 @@ module unitTests =
         Assert.AreEqual(GuessingFromCurrentNode,result.currentState)
         Assert.AreEqual("is it small?",result.messageFromEngine)
 
-        Assert.AreEqual(SubTree {Question="is it small?"; yesBranch = AnimalName "cat"; noBranch = AnimalName "elephant"},result.currentNode)
+        Assert.AreEqual(SubTree {Question="is it small?"; YesBranch = AnimalName "cat"; NoBranch = AnimalName "elephant"},result.currentNode)
 
         result <- consoleInteract { result with messageFromPlayer = Some "no" }
 
@@ -485,7 +485,7 @@ module unitTests =
 
         result <- consoleInteract { result with messageFromPlayer = Some "yes"}
 
-        let expectedResultTree = SubTree {Question="is it small?"; yesBranch = AnimalName "cat"; noBranch = SubTree {Question="is it a cetaceus?"; yesBranch = AnimalName "whale"; noBranch = AnimalName "elephant"}}
+        let expectedResultTree = SubTree {Question="is it small?"; YesBranch = AnimalName "cat"; NoBranch = SubTree {Question="is it a cetaceus?"; YesBranch = AnimalName "whale"; NoBranch = AnimalName "elephant"}}
 
         Assert.AreEqual(expectedResultTree,result.rootTree)
 
@@ -529,7 +529,7 @@ module unitTests =
 
         result <- consoleInteract { result with messageFromPlayer = Some "yes"}
 
-        let expectedResultTree = SubTree {Question="is it small?"; yesBranch = AnimalName "cat"; noBranch = AnimalName "elephant"}
+        let expectedResultTree = SubTree {Question="is it small?"; YesBranch = AnimalName "cat"; NoBranch = AnimalName "elephant"}
 
         // check this one:
         //Assert.AreEqual(["yes"],result.yesNoList)
@@ -572,7 +572,7 @@ module unitTests =
 
         result <- consoleInteract { result with messageFromPlayer = Some "no"}
 
-        let expectedResultTree = SubTree {Question="is it small?"; yesBranch =  SubTree {Question="is it clean?"; yesBranch= AnimalName "cat";noBranch = AnimalName "mouse"}; noBranch = AnimalName "elephant"}
+        let expectedResultTree = SubTree {Question="is it small?"; YesBranch =  SubTree {Question="is it clean?"; YesBranch= AnimalName "cat";NoBranch = AnimalName "mouse"}; NoBranch = AnimalName "elephant"}
 
         Assert.AreEqual(expectedResultTree,result.rootTree)
 
@@ -614,9 +614,9 @@ module unitTests =
 
         result <- consoleInteract { result with messageFromPlayer = Some "yes"}
 
-        let expectedResultTree = SubTree { Question="is it small?"; yesBranch =  
-           SubTree {Question="is it clean?"; yesBranch= SubTree {Question="is it an insect?";yesBranch= AnimalName "ant";noBranch= AnimalName "cat"};
-           noBranch= AnimalName "mouse"};noBranch= AnimalName "elephant"}
+        let expectedResultTree = SubTree { Question="is it small?"; YesBranch =  
+           SubTree {Question="is it clean?"; YesBranch= SubTree {Question="is it an insect?";YesBranch= AnimalName "ant";NoBranch= AnimalName "cat"};
+           NoBranch= AnimalName "mouse"};NoBranch= AnimalName "elephant"}
 
         Assert.AreEqual(expectedResultTree,result.rootTree)
 

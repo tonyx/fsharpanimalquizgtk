@@ -16,12 +16,12 @@ let rec learn playStructure =
 
     let noBranch tree = 
          match tree with
-            |SubTree X -> X.noBranch
+            |SubTree X -> X.NoBranch
             | _ -> failwith "consider the consistency of the yes no list"
 
     let yesBranch tree = 
          match tree with
-            |SubTree X -> X.yesBranch
+            |SubTree X -> X.YesBranch
             | _ -> failwith "consider the consistency of the yes no list"
 
     let thisIsTheQuestion = 
@@ -32,21 +32,21 @@ let rec learn playStructure =
     match playStructure.yesNoList with
      | [] -> match playStructure.messageFromPlayer with
           | Some "yes" -> SubTree { Question=thisIsTheQuestion; 
-                                    yesBranch = AnimalName playStructure.animalToBeLearned; 
-                                    noBranch = AnimalName currentAnimal }
+                                    YesBranch = AnimalName playStructure.animalToBeLearned; 
+                                    NoBranch = AnimalName currentAnimal }
           | Some "no" -> SubTree {  Question=thisIsTheQuestion;
-                                    yesBranch = AnimalName currentAnimal;
-                                    noBranch = AnimalName playStructure.animalToBeLearned }
+                                    YesBranch = AnimalName currentAnimal;
+                                    NoBranch = AnimalName playStructure.animalToBeLearned }
 
           | _ -> failwith "called learn when user interaction is different from yes or no"
 
      | "yes"::T -> SubTree {Question = question playStructure.rootTree; 
-                            yesBranch = learn (substituteYesNoList  {playStructure with rootTree = yesBranch playStructure.rootTree} T);     
-                            noBranch= noBranch playStructure.rootTree
+                            YesBranch = learn (substituteYesNoList  {playStructure with rootTree = yesBranch playStructure.rootTree} T);     
+                            NoBranch= noBranch playStructure.rootTree
                            }
      | "no"::T -> SubTree {Question = question playStructure.rootTree;
-                           yesBranch = yesBranch playStructure.rootTree;
-                           noBranch = learn  (substituteYesNoList {playStructure with rootTree = noBranch playStructure.rootTree} T)
+                           YesBranch = yesBranch playStructure.rootTree;
+                           NoBranch = learn  (substituteYesNoList {playStructure with rootTree = noBranch playStructure.rootTree} T)
                           }
                                                                                                                                    
 let consoleInteract playStructure =
@@ -81,6 +81,7 @@ let consoleInteract playStructure =
                                                 currentNode = learn playStructure;
                                                 messageFromEngine="ok"}        
             | _ ->  {playStructure with messageFromEngine= "please answer only yes or no."} 
+
 
 
 

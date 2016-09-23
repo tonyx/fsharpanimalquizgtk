@@ -1,26 +1,54 @@
 ﻿
 module fsharpAnimalQuizKata.RecordUtils
 open System
+open Gtk;
 
 type KnowledgeTree = AnimalName of string | SubTree of Tree
-and Tree = {Question: string; yesBranch: KnowledgeTree; noBranch: KnowledgeTree}
-type state = | Welcome | InviteToThinkAboutAnAnimal |  GuessingFromCurrentNode |AskWhatAnimalWas | ExpectingDiscriminatingQuestion | AnsweringDiscriminatingQuestion
+and Tree = {Question: string; YesBranch: KnowledgeTree; NoBranch: KnowledgeTree}
+type State = | Welcome | InviteToThinkAboutAnAnimal |  GuessingFromCurrentNode |AskWhatAnimalWas | ExpectingDiscriminatingQuestion | AnsweringDiscriminatingQuestion
 
 let rec printTree tree = 
     match tree with
         | AnimalName name -> name
-        | SubTree {Question=question; yesBranch=yBranch; noBranch=nBranch } ->  "[ Question = " + question  + "; YesBranch = " + printTree yBranch +  "; NoBranch = "+printTree nBranch + "]"
+        | SubTree {Question=question; YesBranch=yBranch; NoBranch=nBranch } ->  "[ Question = " + question  + "; YesBranch = " + printTree yBranch +  "; NoBranch = "+printTree nBranch + "]"
 
-type playingStructure = {       conversationToken: string option;
+
+let noBranch tree = 
+        match tree with
+        |SubTree X -> X.NoBranch
+        | _ -> failwith "consider the consistency of the yes no list"
+
+let yesBranch tree = 
+        match tree with
+        |SubTree X -> X.YesBranch
+        | _ -> failwith "consider the consistency of the yes no list"
+
+
+
+let rec treeToTreeStore tree (store: TreeStore) iter  =
+    match tree with 
+        | AnimalName name -> 
+             do store.AppendValues(iter,[|name|]) |> ignore 
+         
+        | SubTree {Question=quest; YesBranch=yBranch; NoBranch=nBranch } -> 
+
+             let innerIter = store.AppendValues(iter,[|quest|])
+             do treeToTreeStore (yesBranch tree) store innerIter
+             do treeToTreeStore (noBranch tree) store innerIter
+
+
+
+type PlayingStructure = {       conversationToken: string option;
                                 messageFromEngine: string; 
                                 mutable messageFromPlayer: string option; 
-                                currentState: state; 
+                                currentState: State; 
                                 animalToBeLearned: string; 
                                 rootTree: KnowledgeTree; 
                                 currentNode: KnowledgeTree; 
                                 yesNoList: string list; 
                                 newDiscriminatingQuestion : string option
                             }
+
 
 let templateInitStructure  = {
                     conversationToken = None;
@@ -55,14 +83,14 @@ let sayYeah playStructure = {playStructure with messageFromEngine="yeah!" ; curr
 
 let yesSubTreeNavigation playStructure subTree =  
                   { playStructure with 
-                     messageFromEngine = question subTree.yesBranch; 
-                     currentNode = subTree.yesBranch; 
+                     messageFromEngine = question subTree.YesBranch; 
+                     currentNode = subTree.YesBranch; 
                      yesNoList = playStructure.yesNoList@["yes"]}
 
 let noSubTreeNavigation playStructure subTree = 
                   { playStructure with 
-                     messageFromEngine = question subTree.noBranch; 
-                     currentNode = subTree.noBranch; 
+                     messageFromEngine = question subTree.NoBranch; 
+                     currentNode = subTree.NoBranch; 
                      yesNoList = playStructure.yesNoList@["no"]}
 
 let askWhatAnimalWas playStructure  = 
