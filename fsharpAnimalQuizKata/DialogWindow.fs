@@ -25,6 +25,11 @@ module DialogWindow =
 
             let button = new Button("show knowledge tree")
             do outerv.Add(button)
+            let buttonHide = new Button("hide knowledge tree")
+            do outerv.Add(buttonHide)
+
+            let buttonExpandTree = new Button("expand knowledge tree")
+            do outerv.Add(buttonExpandTree)
 
             let tv = new TreeView()
             do tv.HeadersVisible <- true
@@ -44,7 +49,7 @@ module DialogWindow =
 
             let mutable innerIter = new TreeIter()
 
-            do iter <- store.AppendValues("")  
+            do iter <- store.AppendValues("Knowledge Tree")  
 
             do label.Xalign <- (float32)0
             do label.UseMarkup <- true
@@ -71,6 +76,8 @@ module DialogWindow =
             do this.DeleteEvent.AddHandler(fun o e -> this.OnDeleteEvent(o,e))
             do textBox.Activated.AddHandler(fun o e -> this.EnterPressed(o,e))
             do button.Clicked.AddHandler(fun o e -> this.StoreKnowledgeTree(o,e))
+            do buttonHide.Clicked.AddHandler(fun o e -> this.ResetTreeView(o,e))
+            do buttonExpandTree.Clicked.AddHandler(fun o e -> this.ExpandTreeView(o,e))
 
             do this.ShowAll()
 
@@ -84,4 +91,15 @@ module DialogWindow =
                 do textBox.Text <- ""
       
             member this.StoreKnowledgeTree(i,e:EventArgs) =
-                do treeToTreeStore  statusStructure.RootTree store iter
+                do this.ResetTreeView(i,e)
+                do treeToTreeStoreOk  statusStructure.RootTree store iter ""
+
+            member this.ResetTreeView(i,e:EventArgs) =
+                do store.Clear()
+                do iter <- store.AppendValues("Knowledge Tree") 
+
+            member this.ExpandTreeView(i,e:EventArgs) =
+                do this.StoreKnowledgeTree(i,e)
+                do tv.ExpandAll()
+
+                 
