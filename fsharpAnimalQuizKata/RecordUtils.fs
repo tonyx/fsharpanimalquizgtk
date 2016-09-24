@@ -25,18 +25,7 @@ let yesBranch tree =
 
 
 
-let rec treeToTreeStore tree (store: TreeStore) iter  =
-    match tree with 
-        | AnimalName name -> 
-             do store.AppendValues(iter,[|name|]) |> ignore 
-         
-        | SubTree {Question=quest; YesBranch=yBranch; NoBranch=nBranch } -> 
-
-             let innerIter = store.AppendValues(iter,[|quest|])
-             do treeToTreeStore (yesBranch tree) store innerIter
-             do treeToTreeStore (noBranch tree) store innerIter
-
-let rec treeToTreeStoreOk tree (store: TreeStore) iter  prefix =
+let rec treeToTreeStore tree (store: TreeStore) iter  prefix =
     match tree with 
         | AnimalName name -> 
              do store.AppendValues(iter,[|prefix + name|]) |> ignore 
@@ -44,8 +33,8 @@ let rec treeToTreeStoreOk tree (store: TreeStore) iter  prefix =
         | SubTree {Question=quest; YesBranch=yBranch; NoBranch=nBranch } -> 
 
              let innerIter = store.AppendValues(iter,[|prefix + quest|])
-             do treeToTreeStoreOk (yesBranch tree) store innerIter "YES: " 
-             do treeToTreeStoreOk (noBranch tree) store innerIter "NO:  "
+             do treeToTreeStore (yesBranch tree) store innerIter "YES: " 
+             do treeToTreeStore (noBranch tree) store innerIter "NO:  "
 
 
 
