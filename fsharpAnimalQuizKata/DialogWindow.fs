@@ -23,13 +23,18 @@ module DialogWindow =
 
             do outerv.Add(label)
 
+            let hBox = new HBox()
+
             let button = new Button("show knowledge tree")
-            do outerv.Add(button)
+            do hBox.Add(button)
+
             let buttonHide = new Button("hide knowledge tree")
-            do outerv.Add(buttonHide)
+            do hBox.Add(buttonHide)
+
 
             let buttonExpandTree = new Button("expand knowledge tree")
-            do outerv.Add(buttonExpandTree)
+            do hBox.Add(buttonExpandTree)
+            do outerv.Add(hBox)
 
             let tv = new TreeView()
             do tv.HeadersVisible <- true
