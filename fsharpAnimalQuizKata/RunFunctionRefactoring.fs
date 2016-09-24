@@ -13,8 +13,8 @@ let runUntilIndexPassingEntireStructure (outputStream:OutStream) (inputStream:In
     let mutable playStart = playStructure
     for i = 1 to index do
         playStart <- consoleInteract playStart
-        outputStream.Write(playStart.messageFromEngine)
-        playStart.messageFromPlayer <- (Some (inputStream.Input()))
+        outputStream.Write(playStart.MessageFromEngine)
+        playStart.MessageFromPlayer <- (Some (inputStream.Input()))
 
         0
     0

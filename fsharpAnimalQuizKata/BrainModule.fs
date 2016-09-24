@@ -5,7 +5,7 @@ open System
 
 let rec learn playStructure = 
     let currentAnimal  = 
-        match playStructure.currentNode with 
+        match playStructure.CurrentNode with 
             | AnimalName name -> name 
             | _ -> failwith "ERROR, current node structure should be a leaf"
 
@@ -25,47 +25,47 @@ let rec learn playStructure =
             | _ -> failwith "consider the consistency of the yes no list"
 
     let thisIsTheQuestion = 
-        match playStructure.newDiscriminatingQuestion with 
+        match playStructure.NewDiscriminatingQuestion with 
             | Some X -> X
             | None -> failwith "discriminating question cannot be empty"
 
-    match playStructure.yesNoList with
-     | [] -> match playStructure.messageFromPlayer with
+    match playStructure.YesNoList with
+     | [] -> match playStructure.MessageFromPlayer with
           | Some "yes" -> SubTree { Question=thisIsTheQuestion; 
-                                    YesBranch = AnimalName playStructure.animalToBeLearned; 
+                                    YesBranch = AnimalName playStructure.AnimalToBeLearned; 
                                     NoBranch = AnimalName currentAnimal }
           | Some "no" -> SubTree {  Question=thisIsTheQuestion;
                                     YesBranch = AnimalName currentAnimal;
-                                    NoBranch = AnimalName playStructure.animalToBeLearned }
+                                    NoBranch = AnimalName playStructure.AnimalToBeLearned }
 
           | _ -> failwith "called learn when user interaction is different from yes or no"
 
-     | "yes"::T -> SubTree {Question = question playStructure.rootTree; 
-                            YesBranch = learn (substituteYesNoList  {playStructure with rootTree = yesBranch playStructure.rootTree} T);     
-                            NoBranch= noBranch playStructure.rootTree
+     | "yes"::T -> SubTree {Question = question playStructure.RootTree; 
+                            YesBranch = learn (substituteYesNoList  {playStructure with RootTree = yesBranch playStructure.RootTree} T);     
+                            NoBranch= noBranch playStructure.RootTree
                            }
-     | "no"::T -> SubTree {Question = question playStructure.rootTree;
-                           YesBranch = yesBranch playStructure.rootTree;
-                           NoBranch = learn  (substituteYesNoList {playStructure with rootTree = noBranch playStructure.rootTree} T)
+     | "no"::T -> SubTree {Question = question playStructure.RootTree;
+                           YesBranch = yesBranch playStructure.RootTree;
+                           NoBranch = learn  (substituteYesNoList {playStructure with RootTree = noBranch playStructure.RootTree} T)
                           }
                                                                                                                                    
 let consoleInteract playStructure =
-    let currentAnimal = match playStructure.currentNode with | AnimalName name -> name | _ -> "ERROR: expected  leaf node actual non leaf node!"
-    let messageFromPlayer = match playStructure.messageFromPlayer with | Some X -> X | None -> ""
+    let currentAnimal = match playStructure.CurrentNode with | AnimalName name -> name | _ -> "ERROR: expected  leaf node actual non leaf node!"
+    let messageFromPlayer = match playStructure.MessageFromPlayer with | Some X -> X | None -> ""
 
-    match playStructure.currentState with
+    match playStructure.CurrentState with
         | InviteToThinkAboutAnAnimal -> initState playStructure
         // todo: will match later
 //            match playStructure.conversationToken with | Some X ->  initState playStructure | None -> failwith "no token is given"
         | GuessingFromCurrentNode ->   (
-            match playStructure.messageFromPlayer with
+            match playStructure.MessageFromPlayer with
           | Some "yes" -> (
-            match playStructure.currentNode with
+            match playStructure.CurrentNode with
                             | AnimalName _ ->     sayYeah playStructure 
                             | SubTree subTree  -> yesSubTreeNavigation playStructure subTree
                           )
           | Some "no" ->  (
-            match playStructure.currentNode with 
+            match playStructure.CurrentNode with 
                             | AnimalName _ -> askWhatAnimalWas playStructure
                             | SubTree subTree -> noSubTreeNavigation playStructure subTree
                           )
@@ -74,14 +74,10 @@ let consoleInteract playStructure =
         | Welcome -> welcomeMessage playStructure
         | AskWhatAnimalWas ->  askDiscriminatingQuestion playStructure messageFromPlayer currentAnimal
         | ExpectingDiscriminatingQuestion -> askAnswerToDiscriminatingQuestion playStructure messageFromPlayer currentAnimal
-        | AnsweringDiscriminatingQuestion ->  match playStructure.messageFromPlayer with
+        | AnsweringDiscriminatingQuestion ->  match playStructure.MessageFromPlayer with
             | (Some "yes"| Some "no") -> { 
                                             templateInitStructure with 
-                                                rootTree = learn playStructure;
-                                                currentNode = learn playStructure;
-                                                messageFromEngine="ok"}        
-            | _ ->  {playStructure with messageFromEngine= "please answer only yes or no."} 
-
-
-
-
+                                                RootTree = learn playStructure;
+                                                CurrentNode = learn playStructure;
+                                                MessageFromEngine="ok"}        
+            | _ ->  {playStructure with MessageFromEngine= "please answer only yes or no."} 

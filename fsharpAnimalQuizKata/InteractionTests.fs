@@ -12,13 +12,13 @@ module tests =
     open Rhino.Mocks
     open fsharpAnimalQuizKata.RecordUtils
 
-    let  initPlayStructure  = { conversationToken = None; 
-                                messageFromEngine="";
-                                messageFromPlayer=Some "";
-                                currentState=Welcome;animalToBeLearned="";
-                                rootTree=AnimalName "elephant";currentNode=AnimalName "elephant";
-                                yesNoList = [];
-                                newDiscriminatingQuestion=None
+    let  initPlayStructure  = { ConversationToken = None; 
+                                MessageFromEngine="";
+                                MessageFromPlayer=Some "";
+                                CurrentState=Welcome;AnimalToBeLearned="";
+                                RootTree=AnimalName "elephant";CurrentNode=AnimalName "elephant";
+                                YesNoList = [];
+                                NewDiscriminatingQuestion=None
                               }
 
     [<Test>]

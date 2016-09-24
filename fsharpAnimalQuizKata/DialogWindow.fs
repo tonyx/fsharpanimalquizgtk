@@ -57,7 +57,7 @@ module DialogWindow =
             do h.Spacing <- 6
             do h.PackStart(v,false,false,(uint32)0)
 
-            let l1 = new Label(statusStructure.messageFromEngine)
+            let l1 = new Label(statusStructure.MessageFromEngine)
             do l1.Xalign <- (float32)0
             do v.PackStart(l1,true,false,(uint32)0)
             do l1.MnemonicWidget <- textBox
@@ -79,9 +79,9 @@ module DialogWindow =
                 e.RetVal <- true
 
             member this.EnterPressed(i,e:EventArgs) =  
-                do statusStructure <- consoleInteract {statusStructure with messageFromPlayer = Some textBox.Text}
-                do l1.Text <- statusStructure.messageFromEngine
+                do statusStructure <- consoleInteract {statusStructure with MessageFromPlayer = Some textBox.Text}
+                do l1.Text <- statusStructure.MessageFromEngine
                 do textBox.Text <- ""
       
             member this.StoreKnowledgeTree(i,e:EventArgs) =
-                do treeToTreeStore  statusStructure.rootTree store iter
+                do treeToTreeStore  statusStructure.RootTree store iter

@@ -13,13 +13,13 @@ module tokenTests =
     open fsharpAnimalQuizKata.RecordUtils
     open fsharpAnimalQuizKata.RunModuleRefactoring
 
-    let  initPlayStructure state tree = { conversationToken = None; 
-                                messageFromEngine="";
-                                messageFromPlayer=Some "";
-                                currentState=state;animalToBeLearned="";
-                                rootTree=tree;currentNode=tree;
-                                yesNoList = [];
-                                newDiscriminatingQuestion=None
+    let  initPlayStructure state tree = { ConversationToken = None; 
+                                MessageFromEngine="";
+                                MessageFromPlayer=Some "";
+                                CurrentState=state;AnimalToBeLearned="";
+                                RootTree=tree;CurrentNode=tree;
+                                YesNoList = [];
+                                NewDiscriminatingQuestion=None
                              }
 
     [<Test>]
@@ -51,7 +51,7 @@ module tokenTests =
         // arrange
         let playStart = defaultInitState (AnimalName "monkey")
 
-        let noToken = match playStart.conversationToken with | None -> true | Some X -> false
+        let noToken = match playStart.ConversationToken with | None -> true | Some X -> false
 
         Assert.IsTrue(noToken)
 
@@ -64,7 +64,7 @@ module tokenTests =
         let result = consoleInteract playStart
 
         // assert
-        let hasToken = match result.conversationToken with | None -> false | Some _ -> true
+        let hasToken = match result.ConversationToken with | None -> false | Some _ -> true
         Assert.IsTrue(hasToken)
 
     [<Test>]
@@ -76,7 +76,7 @@ module tokenTests =
         let result = consoleInteract playStart
 
         // assert
-        let hasToken = match result.conversationToken with | None -> false | Some _ -> true
+        let hasToken = match result.ConversationToken with | None -> false | Some _ -> true
         Assert.IsTrue(hasToken)
 
 //   let raiseEx X = match X with |  false -> false | _ -> failwith "sdaf"
@@ -89,7 +89,7 @@ module tokenTests =
      let ``for any state different than welcome should use a valid token``()=
 
         // arrange
-        let playStart = {(defaultInitState (AnimalName "cat")) with currentState = InviteToThinkAboutAnAnimal; conversationToken=None }
+        let playStart = {(defaultInitState (AnimalName "cat")) with CurrentState = InviteToThinkAboutAnAnimal; ConversationToken=None }
 
   //      Assert.IsTrue(false)
         // act
