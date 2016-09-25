@@ -5,6 +5,7 @@ open Gtk;
 
 type KnowledgeTree = AnimalName of string | SubTree of Tree
 and Tree = {Question: string; YesBranch: KnowledgeTree; NoBranch: KnowledgeTree}
+
 type State = | Welcome | InviteToThinkAboutAnAnimal |  GuessingFromCurrentNode |AskWhatAnimalWas | ExpectingDiscriminatingQuestion | AnsweringDiscriminatingQuestion
 
 let rec printTree tree = 
@@ -13,29 +14,15 @@ let rec printTree tree =
         | SubTree {Question=question; YesBranch=yBranch; NoBranch=nBranch } ->  "[ Question = " + question  + "; YesBranch = " + printTree yBranch +  "; NoBranch = "+printTree nBranch + "]"
 
 
-let noBranch tree = 
-        match tree with
-        |SubTree X -> X.NoBranch
-        | _ -> failwith "consider the consistency of the yes no list"
-
-let yesBranch tree = 
-        match tree with
-        |SubTree X -> X.YesBranch
-        | _ -> failwith "consider the consistency of the yes no list"
-
-
 
 let rec treeToTreeStore tree (store: TreeStore) iter  prefix =
     match tree with 
         | AnimalName name -> 
              do store.AppendValues(iter,[|prefix + name|]) |> ignore 
-         
         | SubTree {Question=quest; YesBranch=yBranch; NoBranch=nBranch } -> 
-
              let innerIter = store.AppendValues(iter,[|prefix + quest|])
-             do treeToTreeStore (yesBranch tree) store innerIter "YES: " 
-             do treeToTreeStore (noBranch tree) store innerIter "NO:  "
-
+             do treeToTreeStore yBranch store innerIter "YES: " 
+             do treeToTreeStore nBranch store innerIter "NO:  "
 
 
 
