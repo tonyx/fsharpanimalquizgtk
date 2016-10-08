@@ -5,6 +5,8 @@ open fsharpAnimalQuizKata.RecordUtils
 open fsharpAnimalQuizKata.BrainModule
 open FSharp.Data
 open System.IO
+open System.Xml
+open System.Text
 open fsharpAnimalQuizKata.KnowledgeTreeXmlSchema
 
 module DialogWindow =
@@ -107,7 +109,6 @@ module DialogWindow =
             let v =  new VBox()
             do h.Spacing <- 6
 
-//            do outerv.PackStart(mb,false,false,(uint32)0)
 
             do h.PackStart(v,false,false,(uint32)0)
 
@@ -121,8 +122,6 @@ module DialogWindow =
             do h.PackStart(v,true,true,(uint32)0)
 
             do v.PackStart(textBox,true,true,(uint32)0)
-
-//            do v.PackStart(mb,false,false,(uint32)0)
 
 
 
@@ -164,9 +163,40 @@ module DialogWindow =
             member this.SaveActivated(o,e:EventArgs) =
                 let filechooser = new Gtk.FileChooserDialog("save file",this,FileChooserAction.Save, "Cancel",ResponseType.Cancel,"Save",ResponseType.Accept)
                 if filechooser.Run() = (int) ResponseType.Accept then
-                    let knowledgeBaseTree = treeToXml statusStructure.RootTree
+                
+                
+                // fix this
+                    let knowledgeBaseTree = "<?xml version='1.1'?>" + treeToXml statusStructure.RootTree
+                    //let knowledgeBaseTree =  treeToXml statusStructure.RootTree
+                    let mStream = new MemoryStream()
+                    let writer = new XmlTextWriter(mStream,Encoding.Unicode)
+                    let document = new XmlDocument()
+                    
+                    document.WriteContentTo(writer)
+                    writer.Flush()
+                    mStream.Flush()
+                    do mStream.Position <- (int64)0 
+                    let sReader = new StreamReader(mStream)
+                    let formmattedXml = sReader.ReadToEnd()
+                    
+               //     File.WriteAllText(filechooser.Filename,formmattedXml)
+
+                    mStream.Close();
+                    writer.Close();
+                    // end fix this
+                    
+                    
+
                     File.WriteAllText(filechooser.Filename,knowledgeBaseTree)
                     filechooser.Destroy() 
+
+
+// MemoryStream mStream = new MemoryStream();
+// XmlTextWriter writer = new XmlTextWriter(mStream, Encoding.Unicode);
+// XmlDocument document   = new XmlDocument();
+
+
+
 
 
             member this.ShowKnowledgeTree(i,e:EventArgs) =
