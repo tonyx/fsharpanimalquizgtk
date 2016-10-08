@@ -2,6 +2,12 @@
 module fsharpAnimalQuizKata.RecordUtils
 open System
 open Gtk;
+open FSharp.Data
+open System.Xml.Linq
+open System.Data
+open fsharpAnimalQuizKata.KnowledgeTreeXmlSchema
+
+
 
 type KnowledgeTree = AnimalName of string | SubTree of Tree
 and Tree = {Question: string; YesBranch: KnowledgeTree; NoBranch: KnowledgeTree}
@@ -24,6 +30,23 @@ let rec treeToTreeStore tree (store: TreeStore) iter  prefix =
              do treeToTreeStore yBranch store innerIter "YES: " 
              do treeToTreeStore nBranch store innerIter "NO:  "
 
+
+let rec treeToXml tree =
+    match tree with 
+        | AnimalName name -> "<node><animal>" + name + "</animal></node>"
+        | SubTree {Question=question; YesBranch=yBranch; NoBranch=nBranch } ->  
+           "<node><question>" + question + "</question>" + "<yesBranch>" + treeToXml yBranch + "</yesBranch><noBranch>" + treeToXml nBranch + "</noBranch></node>"
+
+      
+let rec xmlToTreeRefactored (tree:KnowledgeBaseXmlSchemaRefactored.Node) =      
+    match tree.Animal with
+    | Some x -> AnimalName x
+    | None ->  match (tree.Question,tree.YesBranch,tree.NoBranch) with 
+      | (Some y1,Some y2,Some y3) -> SubTree {Question=y1; YesBranch=xmlToTreeRefactored y2.Node ; NoBranch = xmlToTreeRefactored y3.Node }
+      | _ -> failwith "error wrapping xml tree"  
+    
+
+ 
 
 
 type PlayingStructure = {       ConversationToken: string option;

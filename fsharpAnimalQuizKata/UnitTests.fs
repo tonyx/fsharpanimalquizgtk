@@ -11,6 +11,10 @@ module unitTests =
     open fsharpAnimalQuizKata.BrainModule
     open Rhino.Mocks
     open fsharpAnimalQuizKata.RecordUtils
+    open FSharp.Data
+    open fsharpAnimalQuizKata.KnowledgeTreeXmlSchema
+
+
 
     [<Test>]
       let ``before starting will not have any conversation token``()=
@@ -490,6 +494,8 @@ module unitTests =
 
 
 
+
+
 [<Test>]
     let ``deep descending the tree (reproducing bug)``() =
         let tree = AnimalName "elephant"
@@ -623,3 +629,49 @@ module unitTests =
 
         printf "%s\n" ("expected: " + (printTree expectedResultTree) )
         Assert.IsTrue(true)
+
+
+
+[<Test>]
+ let ``can load the new refactored structure single node animal``()=
+   let expected = AnimalName "monkey"
+   let xmlVersion = "<node><animal>monkey</animal></node>"
+   let xmlWrapped = KnowledgeBaseXmlSchemaRefactored.Parse xmlVersion
+   let actual = xmlToTreeRefactored xmlWrapped
+   Assert.IsTrue(true)
+
+
+[<Test>]
+ let ``can load the new refactored structure complex node animal``()=
+   let expected =  SubTree {Question="is it big?"; YesBranch=AnimalName "elephant"; NoBranch = AnimalName "cat" }
+
+   let xmlVersion = """<node><question>is it big?</question>
+    <yesBranch><node><animal>elephant</animal></node></yesBranch>
+    <noBranch><node><animal>cat</animal></node></noBranch>
+   
+    </node>"""
+   let xmlWrapped = KnowledgeBaseXmlSchemaRefactored.Parse xmlVersion
+   let actual = xmlToTreeRefactored xmlWrapped
+   Assert.AreEqual(expected,actual)
+
+
+[<Test>]
+ let ``can load the new refactored structure more complex node animal``()=
+   let expected =  SubTree {Question="is it big?"; YesBranch=AnimalName "elephant"; NoBranch = SubTree {Question = "is it an insect?";YesBranch=AnimalName "ant";NoBranch=AnimalName "cat" }}
+
+   let xmlVersion = """
+   <node><question>is it big?</question>
+     <yesBranch><node><animal>elephant</animal></node></yesBranch>
+     <noBranch>
+        <node>
+            <question>is it an insect?</question>
+            <yesBranch><node><animal>ant</animal></node></yesBranch>
+            <noBranch><node><animal>cat</animal></node> </noBranch>
+        </node>
+     </noBranch>
+   </node>"""
+   let xmlWrapped = KnowledgeBaseXmlSchemaRefactored.Parse xmlVersion
+   let actual = xmlToTreeRefactored xmlWrapped
+   Assert.AreEqual(expected,actual)
+     
+    
