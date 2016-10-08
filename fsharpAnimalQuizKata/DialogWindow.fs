@@ -166,8 +166,7 @@ module DialogWindow =
                 
                 
                 // fix this
-                    let knowledgeBaseTree = "<?xml version='1.1'?>" + treeToXml statusStructure.RootTree
-                    //let knowledgeBaseTree =  treeToXml statusStructure.RootTree
+                    let knowledgeBaseTree =  treeToXml statusStructure.RootTree
                     let mStream = new MemoryStream()
                     let writer = new XmlTextWriter(mStream,Encoding.Unicode)
                     let document = new XmlDocument()
