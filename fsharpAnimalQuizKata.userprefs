@@ -1,18 +1,20 @@
 ﻿<Properties StartupConfiguration="{20DB1913-4DE1-4C7B-A4CB-2B73C2351CF5}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="fsharpAnimalQuizKata/RunFunctionRefactoring.fs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="fsharpAnimalQuizKata/XmlTests.fs">
     <Files>
-      <File FileName="fsharpAnimalQuizKata/themain.fs" Line="1" Column="1" />
-      <File FileName="fsharpAnimalQuizKata/DialogWindow.fs" Line="11" Column="36" />
-      <File FileName="fsharpAnimalQuizKata/RecordUtils.fs" Line="1" Column="1" />
-      <File FileName="fsharpAnimalQuizKata/RunFunction.fs" Line="1" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/themain.fs" Line="17" Column="31" />
+      <File FileName="fsharpAnimalQuizKata/RecordUtils.fs" Line="41" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/RunFunction.fs" Line="16" Column="30" />
       <File FileName="fsharpAnimalQuizKata/AssemblyInfo.fs" Line="1" Column="1" />
-      <File FileName="fsharpAnimalQuizKata/BrainModule.fs" Line="26" Column="13" />
-      <File FileName="fsharpAnimalQuizKata/InteractionTests.fs" Line="1" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/BrainModule.fs" Line="1" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/InteractionTests.fs" Line="57" Column="57" />
       <File FileName="fsharpAnimalQuizKata/packages.config" Line="1" Column="1" />
-      <File FileName="fsharpAnimalQuizKata/UnitTests.fs" Line="19" Column="41" />
-      <File FileName="fsharpAnimalQuizKata/IoFunctionsAndTheirMocks.fs" Line="19" Column="9" />
-      <File FileName="fsharpAnimalQuizKata/TokenTests.fs" Line="42" Column="9" />
-      <File FileName="fsharpAnimalQuizKata/RunFunctionRefactoring.fs" Line="11" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/IoFunctionsAndTheirMocks.fs" Line="21" Column="9" />
+      <File FileName="fsharpAnimalQuizKata/TokenTests.fs" Line="23" Column="30" />
+      <File FileName="fsharpAnimalQuizKata/RunFunctionRefactoring.fs" Line="1" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/UnitTests.fs" Line="1" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/DialogWindow.fs" Line="1" Column="1" />
+      <File FileName="fsharpAnimalQuizKata/KnowledgeTreeXmlSchma.fs" Line="13" Column="39" />
+      <File FileName="fsharpAnimalQuizKata/XmlTests.fs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
