@@ -636,8 +636,8 @@ module unitTests =
  let ``can load the new refactored structure single node animal``()=
    let expected = AnimalName "monkey"
    let xmlVersion = "<node><animal>monkey</animal></node>"
-   let xmlWrapped = KnowledgeBaseXmlSchemaRefactored.Parse xmlVersion
-   let actual = xmlToTreeRefactored xmlWrapped
+   let xmlWrapped = KnowledgeBaseXmlSchema.Parse xmlVersion
+   let actual = xmlToTree xmlWrapped
    Assert.IsTrue(true)
 
 
@@ -650,8 +650,8 @@ module unitTests =
     <noBranch><node><animal>cat</animal></node></noBranch>
    
     </node>"""
-   let xmlWrapped = KnowledgeBaseXmlSchemaRefactored.Parse xmlVersion
-   let actual = xmlToTreeRefactored xmlWrapped
+   let xmlWrapped = KnowledgeBaseXmlSchema.Parse xmlVersion
+   let actual = xmlToTree xmlWrapped
    Assert.AreEqual(expected,actual)
 
 
@@ -670,8 +670,9 @@ module unitTests =
         </node>
      </noBranch>
    </node>"""
-   let xmlWrapped = KnowledgeBaseXmlSchemaRefactored.Parse xmlVersion
-   let actual = xmlToTreeRefactored xmlWrapped
+   let xmlWrapped = KnowledgeBaseXmlSchema.Parse xmlVersion
+
+   let actual = xmlToTree xmlWrapped
    Assert.AreEqual(expected,actual)
      
     

@@ -38,11 +38,11 @@ let rec treeToXml tree =
            "<node><question>" + question + "</question>" + "<yesBranch>" + treeToXml yBranch + "</yesBranch><noBranch>" + treeToXml nBranch + "</noBranch></node>"
 
       
-let rec xmlToTreeRefactored (tree:KnowledgeBaseXmlSchemaRefactored.Node) =      
+let rec xmlToTree (tree:KnowledgeBaseXmlSchema.Node) =      
     match tree.Animal with
     | Some x -> AnimalName x
     | None ->  match (tree.Question,tree.YesBranch,tree.NoBranch) with 
-      | (Some y1,Some y2,Some y3) -> SubTree {Question=y1; YesBranch=xmlToTreeRefactored y2.Node ; NoBranch = xmlToTreeRefactored y3.Node }
+      | (Some y1,Some y2,Some y3) -> SubTree {Question=y1; YesBranch=xmlToTree y2.Node ; NoBranch = xmlToTree y3.Node }
       | _ -> failwith "error wrapping xml tree"  
     
 

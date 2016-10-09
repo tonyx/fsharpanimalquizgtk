@@ -45,24 +45,6 @@ module DialogWindow =
             do file_menu.Append(new SeparatorMenuItem())
 
 
-    // item = new ImageMenuItem (Stock.Close, agrp);
-
-    // file_menu.Append (item);
-
-    
-
-    // file_menu.Append (new SeparatorMenuItem ( ));
-
-    
-
-    // item = new ImageMenuItem (Stock.Quit, agrp);
-
-    // item.Activated += Quit_Activated;
-
-    // file_menu.Append (item);
-
-
-
             let label = new Label(("<span weight=\"bold\" size=\"larger\">Animal Quiz</span>"))
 
             do outerv.Add(label)
@@ -153,11 +135,22 @@ module DialogWindow =
             member this.OpenActivated(o,e:EventArgs) =
                 let filechooser = new Gtk.FileChooserDialog("chose the file to open",this,FileChooserAction.Open, "Cancel",ResponseType.Cancel,"Open",ResponseType.Accept)
                 if filechooser.Run() = (int) ResponseType.Accept then
-                    let file = System.IO.File.OpenRead(filechooser.Filename)
-                    let content2 = KnowledgeBaseXmlSchemaRefactored.Load(file)
-                    statusStructure <- {templateInitStructure with RootTree = (xmlToTreeRefactored content2); CurrentNode = (xmlToTreeRefactored content2)}
-                    printf "%s\n" "open"
-                    do file.Close()
+                    try 
+                        let file = System.IO.File.OpenRead(filechooser.Filename)
+                        let content2 = KnowledgeBaseXmlSchema.Load(file)
+                        statusStructure <- {templateInitStructure with RootTree = (xmlToTree content2); CurrentNode = (xmlToTree content2)}
+                        do file.Close()
+                    with 
+                     |  :? Exception as ex -> ( let w1 = new Window("error loading xml, see console for details") 
+                                                let outerv = new VBox()
+                                                outerv.BorderWidth <- (uint32)12
+                                                outerv.Spacing <- 12
+                                                w1.Add(outerv)
+                                                printf "%s\n" (ex.ToString())
+                                                let l = new Label("error loading xml: "+ex.ToString().Substring(0,30)+". See console output for details ")
+                                                //l.Xalign <- (uint32)0
+                                                outerv.PackStart(l,false,false,(uint32)0)
+                                                w1.ShowAll())
                 filechooser.Destroy() 
 
             member this.SaveActivated(o,e:EventArgs) =
